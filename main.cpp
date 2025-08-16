@@ -20,9 +20,15 @@ int main() {
   int tseconds = 60;
   int tsit = 60;
 
+  bool paused = false;
+
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(BLACK);
+    DrawFPS(2, 2);
+
+    DrawText("p: pause", 300 - (MeasureText("p: pause", 28) / 2), 600 - 30, 28,
+             WHITE);
 
     std::string wstr = std::to_string(watermelons);
 
@@ -42,11 +48,19 @@ int main() {
     std::string tstr = std::to_string((tseconds - tseconds % 60) / 60) + ':' +
                        std::to_string(tseconds % 60);
 
-    DrawText(tstr.c_str(), 300 - (MeasureText(tstr.c_str(), 48) / 2), 600 - 50,
+    DrawText(tstr.c_str(), 300 - (MeasureText(tstr.c_str(), 48) / 2), 600 - 80,
              48, tseconds > 30 ? GREEN : RED);
 
     EndDrawing();
 
+    if (IsKeyPressed(KEY_P))
+      paused = !paused;
+
+    if (paused) {
+      DrawRectangle(100, 200, 400, 300, RED);
+      DrawText("PAUSED", 300 - (MeasureText("PAUSED", 80) / 2), 210, 80, WHITE);
+      continue;
+    }
     if ((isMouseOn({250, 300, 100, 100}) &&
          IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) ||
         IsKeyPressed(KEY_SPACE)) {
